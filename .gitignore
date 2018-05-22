@@ -1,7 +1,7 @@
 sessions
 
-server/public/images
-!server/public/images/default.jpg
+src/public/images
+!src/public/images/default.jpg
 
 # Logs
 logs

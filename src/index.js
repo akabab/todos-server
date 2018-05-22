@@ -6,7 +6,7 @@ const session = require('express-session')
 const FileStore = require('session-file-store')(session)
 
 // load .env config file
-require('dotenv').config({ path: path.join(__dirname, '.env') })
+require('dotenv').config({ path: path.join(__dirname, '../.env') })
 
 const db = require('./db')
 const safe = require('./safe')

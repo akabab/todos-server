@@ -1,31 +1,37 @@
 {
-  "private": true,
+  "name": "todos-server",
+  "version": "1.0.0",
+  "description": "Todos list API",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akabab/todos-server.git"
+  },
+  "author": "akabab",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akabab/todos-server/issues"
+  },
   "scripts": {
-    "server": "nodemon server --ignore client --ignore sessions",
-    "client": "http-server client",
-    "deploy": "npm run deploy:client && npm run deploy:server",
-    "deploy:client:gh-pages": "gh-pages -d client",
-    "deploy:client": "git subtree push --prefix client heroku-client master",
-    "deploy:client:-f": "git push heroku-client `git subtree split --prefix client master`:master --force",
-    "deploy:server": "git subtree push --prefix server heroku-server master",
-    "deploy:server:-f": "git push heroku-server `git subtree split --prefix server master`:master --force",
-    "test": "echo 'no tests'",
-    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
-    "lint:js": "standard | snazzy",
-    "lint:css": "stylelint 'client/style/**/*.css'",
-    "lint:html": "htmllint 'client/**/*.html'",
-    "postinstall": "cd server && npm i"
+    "start": "nodemon src --ignore sessions",
+    "deploy": "git push heroku master",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "standard | snazzy"
   },
   "dependencies": {
-    "htmllint-cli": "0.0.6",
-    "http-server": "^0.11.1",
-    "nodemon": "^1.17.2",
-    "snazzy": "^7.1.1",
-    "standard": "^11.0.1",
-    "stylelint": "^9.1.3",
-    "stylelint-config-recommended": "^2.1.0"
+    "body-parser": "^1.18.3",
+    "cloudinary": "^1.11.0",
+    "crypto-js": "^3.1.9-1",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "multer": "^1.3.0",
+    "mysql2": "^1.5.3",
+    "session-file-store": "^1.2.0"
   },
   "devDependencies": {
-    "gh-pages": "^1.1.0"
+    "nodemon": "^1.17.2",
+    "snazzy": "^7.1.1",
+    "standard": "^11.0.1"
   }
 }
