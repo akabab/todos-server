@@ -1,3 +1,6 @@
+-- You must create a database
+-- CREATE DATABASE <DB_NAME>;
+
 CREATE TABLE users (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(64),
