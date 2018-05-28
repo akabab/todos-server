@@ -18,6 +18,14 @@ const mapIds = r => {
 }
 const toId = f => (...args) => f(...args).then(mapIds)
 
+const prepareTodo = async todo => {
+  const user = await readUsers.byId(todo.userId)
+
+  return { ...todo, author: user.name }
+}
+const prepareTodos = async todos => Promise.all(todos.map(prepareTodo))
+
+
 // Collections
 
 const users = db.get('users')
@@ -41,14 +49,14 @@ const deleteUser = id => users.findOneAndDelete({ _id: id }).then(mapIds)
 
 // TODOS
 
-const readTodos = () => todos.find({}).then(mapIds)
-readTodos.byId = id => todos.findOne({ _id: id }).then(mapIds)
+const readTodos = () => todos.find({}).then(mapIds).then(prepareTodos)
+readTodos.byId = id => todos.findOne({ _id: id }).then(mapIds).then(prepareTodo)
 
-const createTodo = todo => todos.insert({ ...todo, stars: [], createdAt: new Date() }).then(mapIds)
+const createTodo = todo => todos.insert({ ...todo, stars: [], createdAt: new Date() }).then(mapIds).then(prepareTodo)
 
-const updateTodo = update => todos.findOneAndUpdate({ _id: update.id }, { $set: update }).then(mapIds)
+const updateTodo = update => todos.findOneAndUpdate({ _id: update.id }, { $set: update }).then(mapIds).then(prepareTodo)
 
-const deleteTodo = id => todos.findOneAndDelete({ _id: id }).then(mapIds)
+const deleteTodo = id => todos.findOneAndDelete({ _id: id }).then(mapIds).then(prepareTodo)
 
 const vote = async ({ todoId, userId }) => {
   const todo = await readTodos.byId(todoId)
@@ -69,7 +77,7 @@ module.exports = {
     read: readTodos,
     update: updateTodo,
     delete: deleteTodo,
-    vote
+    vote: vote
   },
   users: {
     create: createUser,
