@@ -1,4 +1,5 @@
 sessions
+data
 
 src/public/images
 !src/public/images/default.jpg
