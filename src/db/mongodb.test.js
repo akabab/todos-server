@@ -27,7 +27,7 @@ const tests = {
     const todos = await db.todos.read()
     const expected = [ _g.newTodo ]
 
-    assert.deepEqual(newTodo.stars, [1], 'stars array should be initialised as an empty array')
+    assert.deepEqual(newTodo.stars, [], 'stars array should be initialised as an empty array')
     assert(new Date() - newTodo.createdAt < 1000) // ensure createdAt exists and has been created around the current time (±1s)
     assert.deepEqual(todos, expected)
   },
