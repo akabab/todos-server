@@ -138,8 +138,10 @@ app.post('/todos', authRequired, upload.single('image'), async (req, res, next) 
     ? (await imageUploader.upload(path.join(publicImagesPath, req.file.filename)).catch(next)).secure_url
     : process.env.DEFAULT_IMAGE_URL
 
+  const userId = req.session.user.id || req.session.user._id
+
   db.todos.create({
-    userId: req.session.user.id,
+    userId,
     title: req.body.title,
     description: req.body.description,
     image: imageUrl
@@ -154,9 +156,9 @@ app.get('/todos/:id', (req, res, next) => {
     .catch(next)
 })
 
-app.get('/todos/vote/:id', authRequired, (req, res, next) => {
+app.get('/todos/vote/:id', authRequired, async (req, res, next) => {
   const todoId = req.params.id
-  const userId = req.session.user.id
+  const userId = req.session.user.id || req.session.user._id
 
   db.stars.read.byUserIdAndTodoId(userId, todoId)
     .then(hasVoted => hasVoted
@@ -168,7 +170,7 @@ app.get('/todos/vote/:id', authRequired, (req, res, next) => {
 
 app.delete('/todos/:id', authRequired, (req, res, next) => {
   const todoId = req.params.id
-  const userId = req.session.user.id
+  const userId = req.session.user.id || req.session.user._id
 
   db.todos.read.byId(todoId)
     .then(async todo => {
