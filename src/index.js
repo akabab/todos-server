@@ -8,7 +8,9 @@ const FileStore = require('session-file-store')(session)
 // load .env config file
 require('dotenv').config({ path: path.join(__dirname, '../.env') })
 
-const db = require('./db')
+// const db = require('./db/sql')
+const db = require('./db/mongodb')
+
 const safe = require('./safe')
 const imageUploader = require('./imageUploader.js')
 
@@ -160,10 +162,7 @@ app.get('/todos/vote/:id', authRequired, async (req, res, next) => {
   const todoId = req.params.id
   const userId = req.session.user.id || req.session.user._id
 
-  db.stars.read.byUserIdAndTodoId(userId, todoId)
-    .then(hasVoted => hasVoted
-      ? db.stars.delete({ todoId, userId })
-      : db.stars.create({ todoId, userId }))
+  db.todos.vote({ todoId, userId })
     .then(() => res.json('ok'))
     .catch(next)
 })
