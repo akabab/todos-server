@@ -67,7 +67,7 @@ const vote = async ({ todoId, userId }) => {
     ? todo.stars.filter(id => id !== userId) // remove vote
     : [ ...todo.stars, userId ] // add vote
 
-  return updateTodo({ id: todo._id, stars })
+  return updateTodo({ id: todo.id, stars })
 }
 
 module.exports = {
