@@ -1,17 +1,7 @@
 const mysql = require('mysql2/promise')
 
-const url = process.env.DATABASE_URL
-const groups = url.match(/mysql:\/\/(\w+):?(\w+)?@([\w.:-]+)\/(\w+)/)
-const options = {
-  host: groups[3],
-  user: groups[1],
-  password: groups[2],
-  database: groups[4],
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-}
-const pool = mysql.createPool(options)
+const url = process.env.DATABASE_URL || 'mysql://root@localhost/livecodings'
+const pool = mysql.createPool(`${url}?waitForConnections=true&connectionLimit=10&queueLimit=0`)
 
 const first = async q => (await q)[0]
 const exec = (query, params) => {
@@ -37,6 +27,8 @@ const deleteStar = params => exec(`DELETE FROM stars WHERE userId=? AND todoId=?
 const readUsers = () => exec('SELECT * FROM users')
 readUsers.byId = id => exec1(`SELECT * FROM users WHERE id=?`, [ id ])
 readUsers.byEmail = email => exec1(`SELECT * FROM users WHERE email = ?`, [ email ])
+
+readUsers().then(console.log,console.error)
 
 const createUser = params => exec(`
   INSERT INTO users (name, email, password)
